@@ -6,7 +6,8 @@ from kivy.uix.spinner import Spinner
 from kivy.uix.textinput import TextInput
 
 from .miscellaneous import layout_color
-
+from model.persistentdata import PersistentData
+from model.globalvalues import GlobalValues
 
 class LoginScreenLayout(FloatLayout):
     def __init__(self, **kwargs):
@@ -54,7 +55,20 @@ class LoginScreenLayout(FloatLayout):
 
     def btn_submit_do(self, *args):
         if self.spinner_admin_or_user.text.lower() == 'admin':
-            print("logged in as admin")
+            path = GlobalValues().get_persistent_data_file_path()
+            persistent_data = PersistentData(path)
+
+            username = self.text_input_username.text
+            password = self.text_input_password.text
+
+            is_valid = persistent_data.validate_admin_login(username, password)
+
+            if is_valid:
+                self.dialogue.text = ''
+                self.parent.manager.go_to_admin_home()
+            else:
+                self.dialogue.text = 'Wrong admin username and password !!!'
+
         else:
             print("logged in as user")
 
