@@ -19,7 +19,7 @@ class LoginScreenLayout(FloatLayout):
         # Widgets
         n = 15
         idx = 12
-        self.dialogue = Label(text='dialogue text goes here', bold=True, italic=True, size_hint=(0.50, 1/n), pos_hint={'x': 0.25, 'y': 1/n*idx})
+        self.dialogue = Label(text='', bold=True, italic=True, size_hint=(0.50, 1/n), pos_hint={'x': 0.25, 'y': 1/n*idx})
         self.add_widget(self.dialogue)
 
         idx -= 1
