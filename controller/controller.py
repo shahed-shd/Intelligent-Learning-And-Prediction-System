@@ -37,7 +37,7 @@ class ILPS(App):
 
 
 def start():
-    sto_data = StorageData('model/persistent_data.json')
+    storage_data = StorageData('data/persistent_data.json')
 
     app = ILPS()
     app.run()
