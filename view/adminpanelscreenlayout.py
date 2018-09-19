@@ -12,6 +12,7 @@ class AdminPanelScreenLayout(TabbedPanel):
         super(AdminPanelScreenLayout, self).__init__(**kwargs)
 
         self.do_default_tab = False
+        self.tab_pos = 'top_mid'
 
         # Layouts in tabs
         self.estimators_layout = EstimatorsLayout()
