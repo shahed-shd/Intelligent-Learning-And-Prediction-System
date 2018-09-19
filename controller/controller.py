@@ -15,7 +15,7 @@ class MainScreenManager(ScreenManager):
 
         # Screens
         login_scr = Screen(name='login_screen')
-        admin_home_scr = Screen(name='admin_home_screen')
+        admin_panel_scr = Screen(name='admin_panel_screen')
 
         # Screen layouts
         self.login_screen_layout = LoginScreenLayout()
@@ -26,8 +26,9 @@ class MainScreenManager(ScreenManager):
 
         # Adding screens
         self.add_widget(login_scr)
-        self.add_widget(admin_home_scr)
+        self.add_widget(admin_panel_scr)
 
+        self.current = 'admin_panel_screen'
 
     def go_to_admin_home(self):
         self.transition.direction = 'left'
