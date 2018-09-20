@@ -16,6 +16,10 @@ class UserProfileLayout(RelativeLayout):
 
         n = 15
         idx = 14
+        self.label_dialogue = Label(text='', bold=True, italic=True, size_hint=(1, 1/n), pos_hint={'x': 0.1, 'y': 1/n*idx})
+        self.add_widget(self.label_dialogue)
+
+        idx -= 2
         self.add_widget(Label(text='Username:', bold=True, italic=True, size_hint=(0.1, 1/n), pos_hint={'x': 0.1, 'y': 1/n*idx}))
         self.text_input_username = TextInput(text='', readonly=True, size_hint=(0.70, 1/n), pos_hint={'x': 0.25, 'y': 1/n*idx})
         self.add_widget(self.text_input_username)
@@ -49,6 +53,7 @@ class UserProfileLayout(RelativeLayout):
     def dismiss_popup(self, *args):
         self.parent.parent.parent.dismiss()
         self.btn_reset_info.disabled = True
+        self.label_dialogue.text = ''
 
 
     def is_any_change(self):
@@ -75,6 +80,7 @@ class UserProfileLayout(RelativeLayout):
         if self.is_any_change():
             self.text_input_fullname.text = self.user.fullname
             self.text_input_short_bio.text = self.user.short_bio
+            self.label_dialogue.text = ''
 
 
     def btn_remove_user_do(self, *args):
@@ -84,5 +90,11 @@ class UserProfileLayout(RelativeLayout):
 
     def btn_done_do(self, *args):
         if self.is_any_change():
+            fname = self.text_input_fullname.text
+            user2 = self.db.get_user_by_fullname(fname)
+            if user2 and user2.id != self.user.id:
+                self.label_dialogue.text = "This Full Name belongs to another user, please try another."
+                return
+
             self.db.update_user(self.user, {'fullname': self.text_input_fullname.text, 'short_bio': self.text_input_short_bio.text})
         self.dismiss_popup()
