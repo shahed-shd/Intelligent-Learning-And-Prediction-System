@@ -86,6 +86,15 @@ class DB(object):
         return user
 
 
+    def get_user_by_fullname(self, userfullname):
+        try:
+            user = self.session.query(User).filter_by(fullname=userfullname).one()
+        except:
+            user = None
+
+        return user
+
+
     def delete_user(self, user):
         self.session.delete(user)
         self.session.commit()
