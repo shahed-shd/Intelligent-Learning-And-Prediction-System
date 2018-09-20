@@ -11,3 +11,8 @@ class GlobalValues(object):
     def get_persistent_data_file_path(self):
         p = 'data/persistent_data.json'
         return os.path.join(self.app_dir, p)
+
+
+    def get_estimators_path(self):
+        p = 'data/estimators'
+        return os.path.join(self.app_dir, p)
