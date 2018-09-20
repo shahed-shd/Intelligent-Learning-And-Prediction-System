@@ -1,4 +1,6 @@
 from sqlalchemy import text
+import hashlib
+
 
 def get_next_free_id(engine, table_name, column_name='id'):
     '''Returns the next id to be used. Also checks gap in the sequence.
@@ -17,3 +19,9 @@ def get_next_free_id(engine, table_name, column_name='id'):
     next_id = next_id if next_id else 1
 
     return next_id
+
+
+def get_sha256_hex_digest(s):
+    '''Returns SHA256 hex digest of string `s`.'''
+    # Converting to bytes string and getting hex digest
+    return hashlib.sha256(bytes(s, 'utf-8')).hexdigest()

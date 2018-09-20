@@ -51,6 +51,13 @@ class DB(object):
         self.session = Session()
         self.engine = engine
 
+
+    def create_new_session(self):
+        self.session.close()
+        Session = sessionmaker(bind=self.engine)
+        self.session = Session()
+
+
     def add_user(self, user):
         # if user.id == None
         if not user.id:
@@ -67,3 +74,28 @@ class DB(object):
 
         self.session.add(estimator)
         self.session.commit()
+
+
+    def get_users(self):
+        res = self.session.query(User)
+        return res
+
+
+    def get_user_by_id(self, userid):
+        user = self.session.query(User).filter_by(id=userid).one()
+        return user
+
+
+    def delete_user(self, user):
+        self.session.delete(user)
+        self.session.commit()
+
+
+    def update_user(self, ob, attr_val_dict):
+        for key, val in attr_val_dict.items():
+            setattr(ob, key, val)
+        self.session.commit()
+
+    def get_estimators(self):
+        res = self.session.query(Estimator)
+        return res
