@@ -3,7 +3,8 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 
 from model import database
-from .miscellaneous import RV, represent_estimator_in_rv
+from .miscellaneous import represent_estimator_in_rv
+from .rv import RV
 
 
 class EstimatorsLayoutBase(RelativeLayout):
