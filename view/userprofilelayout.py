@@ -2,17 +2,17 @@ from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
-
+from kivy.properties import ObjectProperty
 
 
 
 class UserProfileLayout(RelativeLayout):
+    user = ObjectProperty(None, allownone=True)
+
     def __init__(self, **kwargs):
         super(UserProfileLayout, self).__init__(**kwargs)
 
-        self.user = None
         self.db = None
-        self.rv_data = None
 
         n = 15
         idx = 14
@@ -49,6 +49,8 @@ class UserProfileLayout(RelativeLayout):
         self.text_input_short_bio.bind(text=self.text_input_short_bio_text_bind)
         self.btn_reset_info.disabled = True
 
+        self.bind(user=self.bind_user)
+
 
     def dismiss_popup(self, *args):
         self.parent.parent.parent.dismiss()
@@ -69,11 +71,19 @@ class UserProfileLayout(RelativeLayout):
         self.btn_reset_info.disabled = not self.is_any_change()
 
 
+    def bind_user(self, *args):
+        if self.user:
+            user = self.user
+            self.text_input_username.text = user.username
+            self.text_input_fullname.text = user.fullname
+            self.text_input_short_bio.text = user.short_bio
+
+
     def assign_user(self, user):
         self.user = user
-        self.text_input_username.text = user.username
-        self.text_input_fullname.text = user.fullname
-        self.text_input_short_bio.text = user.short_bio
+    #     self.text_input_username.text = user.username
+    #     self.text_input_fullname.text = user.fullname
+    #     self.text_input_short_bio.text = user.short_bio
 
 
     def btn_reset_info_do(self, *args):
