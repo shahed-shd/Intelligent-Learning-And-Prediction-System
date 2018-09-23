@@ -27,8 +27,7 @@ class EstimatorsLayout(RelativeLayout):
 
         db = database.DB()
         estimator_list = db.get_estimators()
-        L = [{'text': 'Add new'}]
-        L += [{'text': represent_estimator_in_rv(e)} for e in estimator_list]
+        L = [{'text': represent_estimator_in_rv(e)} for e in estimator_list]
 
         self.db = db
         self.rv.data = L
@@ -43,8 +42,7 @@ class EstimatorsLayout(RelativeLayout):
 
 
     def update_rv_data(self, estimator_list, *args):
-        L = [{'text': 'Add new'}]
-        L += [{'text': represent_estimator_in_rv(e)} for e in estimator_list]
+        L = [{'text': represent_estimator_in_rv(e)} for e in estimator_list]
         self.rv.data = L
 
     def reload_rv_data(self, *args):
