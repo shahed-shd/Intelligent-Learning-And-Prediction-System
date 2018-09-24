@@ -108,3 +108,13 @@ class DB(object):
     def get_estimators(self):
         res = self.session.query(Estimator)
         return res
+
+
+    def get_estimator_by_id(self, estimator_id):
+        estimator = self.session.query(Estimator).filter_by(id=estimator_id).one()
+        return estimator
+
+
+    def get_users_estimators_access_list(self):
+        res = self.session.query(User, Estimator).filter(User.estimators).all()
+        return res
