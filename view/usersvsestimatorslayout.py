@@ -21,9 +21,9 @@ class RVViewClass(BoxLayout):
     def __init__(self, **kwargs):
         super(RVViewClass, self).__init__(**kwargs)
 
-        self.label_user_info = Label(text='Usr', bold=True, italic=True)
+        self.label_user_info = Label(text='', bold=True, italic=True)
         self.add_widget(self.label_user_info)
-        self.label_estimator_info = Label(text='Est', bold=True, italic=True)
+        self.label_estimator_info = Label(text='', bold=True, italic=True)
         self.add_widget(self.label_estimator_info)
         self.switch_is_accessible = Switch(active=True)
         self.add_widget(self.switch_is_accessible)
@@ -41,10 +41,8 @@ class RVViewClass(BoxLayout):
         if self.switch_is_accessible.active:
             if not (estimator in user.estimators):
                 user.estimators.append(estimator)
-                print("Added ----------------------------------")
         else:
             user.estimators.remove(estimator)
-            print("Removed ----------------------------------")
 
 
     def represent_info(self, *args):
