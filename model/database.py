@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Table, Column, Integer, String, DateTime, ForeignKey, text
+from sqlalchemy import create_engine, Table, Column, Integer, String, DateTime, ForeignKey, UniqueConstraint, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
@@ -9,7 +9,9 @@ Base = declarative_base()
 
 user_estimator_association_table = Table('users_estimators_association', Base.metadata,
     Column('user_id', Integer, ForeignKey('users.id')),
-    Column('estimator_id', Integer, ForeignKey('estimators.id'))
+    Column('estimator_id', Integer, ForeignKey('estimators.id')),
+    # explicit/composite unique constraint.  'name' is optional.
+    UniqueConstraint('user_id', 'estimator_id', name='uix_1')
 )
 
 
