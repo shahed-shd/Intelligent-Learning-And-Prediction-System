@@ -65,7 +65,7 @@ class LoginScreenLayout(FloatLayout):
 
             if is_valid:
                 self.dialogue.text = ''
-                self.parent.manager.go_to_admin_home()
+                self.parent.manager.go_to_admin_panel()
             else:
                 self.dialogue.text = 'Wrong admin username and password !!!'
 

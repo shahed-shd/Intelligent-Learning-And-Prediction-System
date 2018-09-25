@@ -5,7 +5,7 @@ import os
 
 class GlobalValues(object):
     def __init__(self, **kwargs):
-        self.app_dir = '/home/shahed/ShdHomeData/ILPS'
+        self.app_dir = '/home/shahed/ShdHomeData/Intelligent-Learning-And-Prediction-System'
 
 
     def get_persistent_data_file_path(self):
