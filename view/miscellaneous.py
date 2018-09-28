@@ -1,5 +1,7 @@
 # Miscellaneous functions are defined here.
 
+import functools
+
 from kivy.graphics import Color, Rectangle
 
 

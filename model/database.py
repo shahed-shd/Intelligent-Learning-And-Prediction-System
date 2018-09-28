@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Table, Column, Integer, String, DateTime, 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
-from .miscellaneous import get_next_free_id
+from .miscellaneous import get_next_free_id, get_sha256_hex_digest
 
 
 Base = declarative_base()
@@ -69,6 +69,19 @@ class DB(object):
         self.session.commit()
 
 
+    def add_user_by_attributes(self, *, user_id, username, fullname, short_bio, raw_password):
+        user = User()
+
+        user.id = user_id if user_id else get_next_free_id(self.engine, user.__table__.name, 'id')
+        user.username = username
+        user.fullname = fullname
+        user.short_bio = short_bio
+        user.password_hash = get_sha256_hex_digest(raw_password)
+
+        self.session.add(user)
+        self.session.commit()
+
+
     def add_estimator(self, estimator):
         # if estimator.id == None
         if not estimator.id:
@@ -85,6 +98,15 @@ class DB(object):
 
     def get_user_by_id(self, userid):
         user = self.session.query(User).filter_by(id=userid).one()
+        return user
+
+
+    def get_user_by_username(self, username):
+        try:
+            user = self.session.query(User).filter_by(username=username).one()
+        except:
+            user = None
+
         return user
 
 

@@ -10,6 +10,7 @@ from model import database
 from .miscellaneous import represent_user_in_rv
 from .rv import RV
 from .userprofilelayout import UserProfileLayout
+from .addnewuserlayout import AddNewUserLayout
 
 
 class UsersLayout(RelativeLayout):
@@ -31,7 +32,6 @@ class UsersLayout(RelativeLayout):
 
         db = database.DB()
         user_list = db.get_users()
-        # L = [{'text': 'Add new'}]
         L = [{'text': represent_user_in_rv(u), 'on_release': functools.partial(self.show_user_profile_on_release, user_id=u.id)} for u in user_list]
 
         self.db = db
@@ -44,9 +44,12 @@ class UsersLayout(RelativeLayout):
         self.popup_user_profile = Popup(title='User profile', title_align='center', content=UserProfileLayout(), auto_dismiss=False, on_dismiss=self.reload_rv_data, size_hint=(0.95, 0.95), pos_hint={'center_x': 0.5, 'center_y': 0.5})
         self.popup_user_profile.content.db = self.db
 
+        self.popup_add_new_user = Popup(title='Add new user', title_align='center', content=AddNewUserLayout(), auto_dismiss=False, on_dismiss=self.reload_rv_data, size_hint=(0.95, 0.95), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+        self.popup_add_new_user.content.userslayout_instance = self
+
 
     def btn_add_new_do(self, *args):
-        pass
+        self.popup_add_new_user.open()
 
 
     def show_user_profile_on_release(self, *args, **kwargs):
@@ -57,9 +60,18 @@ class UsersLayout(RelativeLayout):
         self.popup_user_profile.open()
 
 
+    def build_rv_data_item(self, user):
+        u = user
+        return {'text': represent_user_in_rv(u), 'on_release': functools.partial(self.show_user_profile_on_release, user_id=u.id)}
+
+
+    def rv_data_append(self, user, *args):
+        d = self.build_rv_data_item(user)
+        self.rv.data.append(d)
+
+
     def update_rv_data(self, user_list, *args):
-        # L = [{'text': 'Add new'}]
-        L = [{'text': represent_user_in_rv(u), 'on_release': functools.partial(self.show_user_profile_on_release, user_id=u.id)} for u in user_list]
+        L = [self.build_rv_data_item(u) for u in user_list]
         self.rv.data = L
 
 
