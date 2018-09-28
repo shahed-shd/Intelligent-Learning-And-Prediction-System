@@ -1,4 +1,4 @@
-from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.label import Label
@@ -9,9 +9,9 @@ from .miscellaneous import layout_color
 from model.persistentdata import PersistentData
 from model.globalvalues import GlobalValues
 
-class LoginScreenLayout(FloatLayout):
+class LoginScreen(Screen):
     def __init__(self, **kwargs):
-        super(LoginScreenLayout, self).__init__(**kwargs)
+        super(LoginScreen, self).__init__(**kwargs)
 
         # Canvas color
         layout_color(self, (0.25, 0, 0, 1))
@@ -65,7 +65,7 @@ class LoginScreenLayout(FloatLayout):
 
             if is_valid:
                 self.dialogue.text = ''
-                self.parent.manager.go_to_admin_panel()
+                self.manager.go_to_admin_panel()
             else:
                 self.dialogue.text = 'Wrong admin username and password !!!'
 

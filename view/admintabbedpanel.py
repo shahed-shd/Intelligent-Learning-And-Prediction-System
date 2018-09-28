@@ -1,5 +1,4 @@
 from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelHeader
-from kivy.uix.floatlayout import FloatLayout
 
 from .estimatorslayout import EstimatorsLayout
 from .userslayout import UsersLayout
@@ -8,9 +7,9 @@ from .activitylogslayout import ActivityLogsLayout
 from .adminprofilelayout import AdminProfileLayout
 
 
-class AdminPanelScreenLayout(TabbedPanel):
+class AdminTabbedPanel(TabbedPanel):
     def __init__(self, **kwargs):
-        super(AdminPanelScreenLayout, self).__init__(**kwargs)
+        super(AdminTabbedPanel, self).__init__(**kwargs)
 
         self.do_default_tab = False
         self.tab_pos = 'top_mid'
