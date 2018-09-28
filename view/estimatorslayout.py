@@ -1,11 +1,13 @@
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 
 from model import database
 from .miscellaneous import represent_estimator_in_rv
 from .rv import RV
+from .addnewestimatorlayout import AddNewEstimatorLayout
 
 
 class EstimatorsLayout(RelativeLayout):
@@ -36,9 +38,11 @@ class EstimatorsLayout(RelativeLayout):
         self.text_input_search_title.bind(text=self.search_bind)
         self.text_input_search_type.bind(text=self.search_bind)
 
+        self.popup_add_new_estimator = Popup(title='Add new estimator', title_align='center', content=AddNewEstimatorLayout(), auto_dismiss=False, on_dismiss=self.reload_rv_data, size_hint=(0.95, 0.95), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+
 
     def btn_add_new_do(self, *args):
-        pass
+        self.popup_add_new_estimator.open()
 
 
     def update_rv_data(self, estimator_list, *args):
