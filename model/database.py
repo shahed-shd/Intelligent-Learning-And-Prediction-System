@@ -124,6 +124,11 @@ class DB(object):
         self.session.commit()
 
 
+    def delete_estimator(self, est):
+        self.session.delete(est)
+        self.session.commit()
+
+
     def update_user(self, ob, attr_val_dict):
         for key, val in attr_val_dict.items():
             setattr(ob, key, val)

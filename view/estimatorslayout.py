@@ -1,3 +1,5 @@
+import functools
+
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
@@ -8,6 +10,7 @@ from model import database
 from .miscellaneous import represent_estimator_in_rv
 from .rv import RV
 from .addnewestimatorlayout import AddNewEstimatorLayout
+from .estimatorshowlayout import EstimatorShowLayout
 
 
 class EstimatorsLayout(RelativeLayout):
@@ -29,7 +32,8 @@ class EstimatorsLayout(RelativeLayout):
 
         db = database.DB()
         estimator_list = db.get_estimators()
-        L = [{'text': represent_estimator_in_rv(e)} for e in estimator_list]
+        L = [{'text': represent_estimator_in_rv(e) + "KKK", 'on_release': functools.partial(self.show_estimator_on_release, est_id=e.id)} for e in estimator_list]
+        # L = [{'text': represent_estimator_in_rv(e)} for e in estimator_list]
 
         self.db = db
         self.rv.data = L
@@ -38,7 +42,18 @@ class EstimatorsLayout(RelativeLayout):
         self.text_input_search_title.bind(text=self.search_bind)
         self.text_input_search_type.bind(text=self.search_bind)
 
+        self.popup_estimator_show = Popup(title='Estimator show', title_align='center', content=EstimatorShowLayout(), auto_dismiss=False, on_dismiss=self.reload_rv_data, size_hint=(0.95, 0.95), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+        self.popup_estimator_show.content.db = self.db
+
         self.popup_add_new_estimator = Popup(title='Add new estimator', title_align='center', content=AddNewEstimatorLayout(), auto_dismiss=False, on_dismiss=self.reload_rv_data, size_hint=(0.95, 0.95), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+
+
+    def show_estimator_on_release(self, *args, **kwargs):
+        est_id = kwargs['est_id']
+        est = self.db.get_estimator_by_id(est_id)
+        layout = self.popup_estimator_show.content
+        layout.assign_estimator(est)
+        self.popup_estimator_show.open()
 
 
     def btn_add_new_do(self, *args):
@@ -46,8 +61,10 @@ class EstimatorsLayout(RelativeLayout):
 
 
     def update_rv_data(self, estimator_list, *args):
-        L = [{'text': represent_estimator_in_rv(e)} for e in estimator_list]
+        L = [{'text': represent_estimator_in_rv(e), 'on_release': functools.partial(self.show_estimator_on_release, est_id=e.id)} for e in estimator_list]
+        # L = [{'text': represent_estimator_in_rv(e)} for e in estimator_list]
         self.rv.data = L
+
 
     def reload_rv_data(self, *args):
         self.text_input_search_title.text = ''
