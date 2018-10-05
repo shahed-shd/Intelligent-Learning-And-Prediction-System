@@ -88,9 +88,25 @@ class AddNewRegressionScreen(Screen):
         else:
             try:
                 X = np.loadtxt(self.text_input_feature_file_choose.text)
+                X = X.reshape(-1, int(self.text_input_n_features.text))
                 y = np.loadtxt(self.text_input_target_file_choose.text)
             except Exception as e:
                 dialogue = str(e)
+
+        if len(dialogue) == 0:
+                fc = int(self.text_input_n_features.text)
+                tc = int(self.text_input_n_targets.text)
+
+                if X.shape[0] != y.shape[0]:
+                    dialogue = "Number of rows in Feature file and target file mismatch !"
+                elif X.shape[1] != fc:
+                    dialogue = "Feature file doesn't contain {} columns !".format(fc)
+                elif tc == 1:
+                    if y.ndim != 1:
+                        dialogue = "Target file doesn't contain {} columns !".format(tc)
+                elif tc > 1:
+                    if tc != y.shape[1]:
+                        dialogue = "Target file doesn't contain {} columns !".format(tc)
 
         self.label_dialogue.text = dialogue
 
