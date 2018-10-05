@@ -55,7 +55,6 @@ class AddNewRegressionScreen(Screen):
         self.add_widget(Button(text='Reset', italic=True, on_release=self.reset_input_fields, size_hint=(0.15, 1/n), pos_hint={'x': 0.30, 'y': 1/n*idx}))
         self.add_widget(Button(text='Add', italic=True, on_release=self.btn_add_do, size_hint=(0.15, 1/n), pos_hint={'x': 0.45, 'y': 1/n*idx}))
 
-        self.popup_progress_bar = PopupProgressBar(title='Please wait . . .', title_align='center', auto_dismiss=False, size_hint=(0.95, 0.95), pos_hint={'center_x': 0.5, 'center_y': 0.5})
         self.db = DB()
 
 
@@ -97,16 +96,14 @@ class AddNewRegressionScreen(Screen):
                 fc = int(self.text_input_n_features.text)
                 tc = int(self.text_input_n_targets.text)
 
-                if X.shape[0] != y.shape[0]:
-                    dialogue = "Number of rows in Feature file and target file mismatch !"
-                elif X.shape[1] != fc:
+                if X.shape[1] != fc:
                     dialogue = "Feature file doesn't contain {} columns !".format(fc)
-                elif tc == 1:
-                    if y.ndim != 1:
-                        dialogue = "Target file doesn't contain {} columns !".format(tc)
-                elif tc > 1:
-                    if tc != y.shape[1]:
-                        dialogue = "Target file doesn't contain {} columns !".format(tc)
+                elif tc == 1 and y.ndim != 1:
+                    dialogue = "Target file doesn't contain {} columns !".format(tc)
+                elif tc > 1 and len(y.shape) > 1 and tc != y.shape[1]:
+                    dialogue = "Target file doesn't contain {} columns !".format(tc)
+                elif X.shape[0] != y.shape[0]:
+                    dialogue = "Number of rows in Feature file and target file mismatch !"
 
         self.label_dialogue.text = dialogue
 
