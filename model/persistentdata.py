@@ -17,5 +17,20 @@ class PersistentData(object):
             return False
 
 
+    def change_admin_password(self, new_pw):
+        a = self.__store.get('admin')
+
+        un = a['username']
+        pw = a['password']
+
+        self.__store.put('admin', username=un, password=new_pw)
 
 
+
+    def change_admin_username(self, new_username):
+        a = self.__store.get('admin')
+
+        un = a['username']
+        pw = a['password']
+
+        self.__store.put('admin', username=new_username, password=pw)

@@ -18,12 +18,12 @@ class AdminTabbedPanel(TabbedPanel):
         self.estimators_layout = EstimatorsLayout()
         self.users_layout = UsersLayout()
         self.users_vs_estimators_layout = UsersVSEstimatorsLayout()
-        self.activity_logs_layout = ActivityLogsLayout()
+        # self.activity_logs_layout = ActivityLogsLayout()
         self.admin_profile_layout = AdminProfileLayout()
 
         # Adding tabbed panel headers
         self.add_widget(TabbedPanelHeader(text='Estimators', content=self.estimators_layout))
         self.add_widget(TabbedPanelHeader(text='Users', content=self.users_layout))
         self.add_widget(TabbedPanelHeader(text='Users VS\nEstimators', content=self.users_vs_estimators_layout))
-        self.add_widget(TabbedPanelHeader(text='Activity logs', content=self.activity_logs_layout))
+        # self.add_widget(TabbedPanelHeader(text='Activity logs', content=self.activity_logs_layout))
         self.add_widget(TabbedPanelHeader(text='Profile', content=self.admin_profile_layout))

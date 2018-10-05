@@ -9,7 +9,6 @@ from .miscellaneous import layout_color
 from model.persistentdata import PersistentData
 from model.globalvalues import GlobalValues
 from model.database import DB
-# from model.miscellaneous import get_sha256_hex_digest
 
 
 class LoginScreen(Screen):
@@ -23,7 +22,11 @@ class LoginScreen(Screen):
 
         # Widgets
         n = 15
-        idx = 12
+        idx = 14
+
+        self.add_widget(Label(text='Intelligent Learning and Prediction System', bold=True, italic=True, size_hint=(0.50, 1/n*3), pos_hint={'x': 0.25, 'y': 1/n*(idx-2)}))
+
+        idx -= 3
         self.dialogue = Label(text='', bold=True, italic=True, size_hint=(0.50, 1/n), pos_hint={'x': 0.25, 'y': 1/n*idx})
         self.add_widget(self.dialogue)
 
