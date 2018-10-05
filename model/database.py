@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Table, Column, Integer, String, DateTime, ForeignKey, UniqueConstraint, text
+from sqlalchemy import create_engine, Table, Column, Integer, String, DateTime, ForeignKey, UniqueConstraint, text, literal
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
@@ -141,4 +141,12 @@ class DB(object):
 
     def get_users_estimators_access_list(self):
         res = self.session.query(User, Estimator).filter(User.estimators).all()
+        return res
+
+
+    def does_estimator_title_exist(self, estimator_title):
+        print("EST TITLE:", estimator_title)
+        q = self.session.query(Estimator).filter(Estimator.title == estimator_title)
+        res = self.session.query(q.exists()).scalar()
+        print("RES:", res)
         return res

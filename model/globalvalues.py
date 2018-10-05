@@ -16,3 +16,8 @@ class GlobalValues(object):
     def get_estimators_path(self):
         p = 'data/estimators'
         return os.path.join(self.app_dir, p)
+
+
+    def get_images_path(self):
+        p = 'data/images'
+        return os.path.join(self.app_dir, p)

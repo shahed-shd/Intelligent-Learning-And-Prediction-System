@@ -4,6 +4,10 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 
+import numpy as np
+
+from model.database import DB
+from controller.miscellaneous import prepare_regression_estimator
 from .filechooserpopup import FileChooserPopup
 
 
@@ -48,15 +52,31 @@ class AddNewRegressionScreen(Screen):
         self.add_widget(Button(text='Choose', italic=True, on_release=self.target_file_chooser_popup.open, size_hint=(0.14, 1/n), pos_hint={'x': 0.85, 'y': 1/n*idx}))
 
         idx -= 2
+        self.add_widget(Button(text='Reset', italic=True, on_release=self.reset_input_fields, size_hint=(0.15, 1/n), pos_hint={'x': 0.30, 'y': 1/n*idx}))
         self.add_widget(Button(text='Add', italic=True, on_release=self.btn_add_do, size_hint=(0.15, 1/n), pos_hint={'x': 0.45, 'y': 1/n*idx}))
+
+        self.popup_progress_bar = PopupProgressBar(title='Please wait . . .', title_align='center', auto_dismiss=False, size_hint=(0.95, 0.95), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+        self.db = DB()
+
+
+    def reset_input_fields(self, *args):
+        self.dialogue = ''
+        self.text_input_title.text = ''
+        self.text_input_n_features.text = ''
+        self.text_input_n_targets.text = ''
+        self.text_input_feature_file_choose.text = ''
+        self.text_input_target_file_choose.text = ''
 
 
     def btn_add_do(self, *args):
         print("btn add do pressed.")
+
         dialogue = ''
 
         if len(self.text_input_title.text) == 0:
             dialogue = 'Please enter title.'
+        elif self.db.does_estimator_title_exist(self.text_input_title.text):
+            dialogue = 'Title already exists. Try another.'
         elif len(self.text_input_n_features.text) == 0:
             dialogue = 'Please enter number of features.'
         elif len(self.text_input_n_targets.text) == 0:
@@ -65,5 +85,19 @@ class AddNewRegressionScreen(Screen):
             dialogue = 'Please choose a feature file.'
         elif len(self.text_input_target_file_choose.text) == 0:
             dialogue = 'Please choose a target file.'
+        else:
+            try:
+                X = np.loadtxt(self.text_input_feature_file_choose.text)
+                y = np.loadtxt(self.text_input_target_file_choose.text)
+            except Exception as e:
+                dialogue = str(e)
 
         self.label_dialogue.text = dialogue
+
+        if dialogue != '':
+            return
+
+        self.label_dialogue.text = 'Please wait . . .'
+        prepare_regression_estimator(X, y, title=self.text_input_title.text, features_file_path=self.text_input_feature_file_choose.text, targets_file_path=self.text_input_target_file_choose.text)
+        self.reset_input_fields()
+        self.label_dialogue.text = 'Estimator added.'

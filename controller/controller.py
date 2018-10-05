@@ -30,7 +30,8 @@ class MainScreenManager(ScreenManager):
         self.add_widget(login_scr)
         self.add_widget(admin_panel_scr)
 
-        self.current = 'login_screen'
+        # self.current = 'login_screen'
+        self.current = 'admin_panel_screen'
 
 
     def go_to_admin_panel(self, *args):
