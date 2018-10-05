@@ -42,7 +42,8 @@ class RVViewClass(BoxLayout):
             if not (estimator in user.estimators):
                 user.estimators.append(estimator)
         else:
-            user.estimators.remove(estimator)
+            if estimator in user.estimators:
+                user.estimators.remove(estimator)
 
 
     def represent_info(self, *args):
@@ -52,7 +53,7 @@ class RVViewClass(BoxLayout):
 
             self.label_user_info.text = represent_user_in_rv(user)
             self.label_estimator_info.text = represent_estimator_in_rv(estimator)
-            self.switch_is_accessible.active = True
+            self.switch_is_accessible.active = estimator in user.estimators
 
 
 class RVUsersVSEstimators(RV):
@@ -67,8 +68,8 @@ class UsersVSEstimatorsLayout(RelativeLayout):
 
         n = 18
         idx = 16
-        self.btn_add_new = Button(text='Add new access', italic=True, on_release=self.btn_add_new_do, size_hint=(0.20, 1/n), pos_hint={'x': 0.05, 'y': 1/n*idx})
-        self.add_widget(self.btn_add_new)
+        # self.btn_add_new = Button(text='Add new access', italic=True, on_release=self.btn_add_new_do, size_hint=(0.20, 1/n), pos_hint={'x': 0.05, 'y': 1/n*idx})
+        # self.add_widget(self.btn_add_new)
         self.add_widget(Label(text='Search bar:', bold=True, italic=True, size_hint=(0.10, 1/n), pos_hint={'x': 0.45, 'y': 1/n*idx}))
         self.text_input_search_username = TextInput(text='', hint_text='username like', password=False, multiline=False, write_tab=False, focus=False, size_hint=(0.20, 1/n), pos_hint={'x': 0.55, 'y': 1/n*idx})
         self.add_widget(self.text_input_search_username)
@@ -79,7 +80,16 @@ class UsersVSEstimatorsLayout(RelativeLayout):
         self.rv = RVUsersVSEstimators(size_hint=(1, 1/n*(idx-2)), pos_hint={'x': 0, 'y': 1/n*(2)})
 
         db = database.DB()
-        L = db.get_users_estimators_access_list()
+        # L = db.get_users_estimators_access_list()
+
+        # uL = db.get_users()
+        # eL = db.get_estimators()
+        # L = []
+
+        # for u in uL:
+        #     for e in eL:
+        #         L.append((u, e))
+        L = db.get_all_possible_user_estimator_pair()
         self.rv.data = [{'user_id': u.id, 'estimator_id': e.id, 'db': db} for u, e in L]
 
         self.db = db
@@ -93,10 +103,6 @@ class UsersVSEstimatorsLayout(RelativeLayout):
 
         self.text_input_search_username.bind(text=self.search_bind)
         self.text_input_search_estimator_title.bind(text=self.search_bind)
-
-
-    def btn_add_new_do(self, *args):
-        pass
 
 
     def btn_done_do(self, *args):
@@ -119,7 +125,7 @@ class UsersVSEstimatorsLayout(RelativeLayout):
         usernamelike = '%' + self.text_input_search_username.text + '%'
         estimatortitlelike = '%' + self.text_input_search_estimator_title.text + '%'
 
-        qry = self.db.session.query(database.User, database.Estimator).filter(database.User.estimators)
+        qry = self.db.get_qry_all_possible_user_estimator_pair()
 
         if len(usernamelike) > 2:
             qry = qry.filter(database.User.username.like(usernamelike))

@@ -110,13 +110,13 @@ class DB(object):
         return user
 
 
-    def get_user_by_fullname(self, userfullname):
+    def get_users_by_fullname(self, userfullname):
         try:
-            user = self.session.query(User).filter_by(fullname=userfullname).one()
+            users = self.session.query(User).filter_by(fullname=userfullname).all()
         except:
-            user = None
+            users = None
 
-        return user
+        return users
 
 
     def delete_user(self, user):
@@ -129,13 +129,28 @@ class DB(object):
         self.session.commit()
 
 
-    def update_user(self, ob, attr_val_dict):
-        for key, val in attr_val_dict.items():
-            setattr(ob, key, val)
-        self.session.commit()
+    # def update_user(self, user_id, attr_val_dict):
+    #     user = self.get_user_by_id(user_id)
+
+    #     for key, val in attr_val_dict.items():
+    #         setattr(user, key, val)
+    #     self.session.commit()
+
 
     def get_estimators(self):
         res = self.session.query(Estimator)
+        return res
+
+    def get_query_estimators_by_user_id(self, user_id):
+        user = self.get_user_by_id(user_id)
+        L = [est.id for est in user.estimators]
+        qry = self.session.query(Estimator).filter(Estimator.id.in_(L))
+        return qry
+
+
+    def get_estimators_by_user_id(self, user_id):
+        qry = self.get_query_estimators_by_user_id(user_id)
+        res = qry.all()
         return res
 
 
@@ -154,4 +169,22 @@ class DB(object):
         q = self.session.query(Estimator).filter(Estimator.title == estimator_title)
         res = self.session.query(q.exists()).scalar()
         print("RES:", res)
+        return res
+
+
+    def does_user_password_match(self, username, raw_password):
+        user = self.get_user_by_username(username)
+        pw_hash = get_sha256_hex_digest(raw_password)
+
+        return (user.password_hash == pw_hash)
+
+
+    def get_qry_all_possible_user_estimator_pair(self):
+        qry = self.session.query(User, Estimator)
+        return qry
+
+
+    def get_all_possible_user_estimator_pair(self):
+        qry = self.get_qry_all_possible_user_estimator_pair()
+        res = qry.all()
         return res

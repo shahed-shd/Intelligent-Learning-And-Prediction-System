@@ -9,11 +9,11 @@ import numpy as np
 from controller.miscellaneous import get_prediction
 
 
-class EstimatorShowLayout(RelativeLayout):
+class UserEstimatorShowLayout(RelativeLayout):
     est = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
-        super(EstimatorShowLayout, self).__init__(**kwargs)
+        super(UserEstimatorShowLayout, self).__init__(**kwargs)
 
         self.db = None
 
@@ -37,7 +37,6 @@ class EstimatorShowLayout(RelativeLayout):
         idx -= 6
         self.add_widget(Button(text='Back', italic=True, on_release=self.btn_back_do, size_hint=(0.20, 1/n), pos_hint={'x': 0.15, 'y': 1/n*idx}))
         self.add_widget(Button(text='Reset inputs', italic=True, on_release=self.btn_reset_do, size_hint=(0.20, 1/n), pos_hint={'x': 0.35, 'y': 1/n*idx}))
-        self.add_widget(Button(text='Remove estimator', italic=True, on_release=self.btn_remove_estimator_do, size_hint=(0.20, 1/n), pos_hint={'x': 0.55, 'y': 1/n*idx}))
         self.add_widget(Button(text='Predict', italic=True, on_release=self.btn_predict_do, size_hint=(0.20, 1/n), pos_hint={'x': 0.75, 'y': 1/n*idx}))
 
         self.bind(est=self.bind_est)
@@ -68,11 +67,6 @@ class EstimatorShowLayout(RelativeLayout):
     def dismiss_popup(self, *args):
         self.parent.parent.parent.dismiss()
         self.btn_reset_do()
-
-
-    def btn_remove_estimator_do(self, *args):
-        self.db.delete_estimator(self.est)
-        self.dismiss_popup()
 
 
     def btn_predict_do(self, *args):

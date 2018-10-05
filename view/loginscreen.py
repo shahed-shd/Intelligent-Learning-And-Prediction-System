@@ -8,6 +8,9 @@ from kivy.uix.textinput import TextInput
 from .miscellaneous import layout_color
 from model.persistentdata import PersistentData
 from model.globalvalues import GlobalValues
+from model.database import DB
+# from model.miscellaneous import get_sha256_hex_digest
+
 
 class LoginScreen(Screen):
     def __init__(self, **kwargs):
@@ -15,6 +18,8 @@ class LoginScreen(Screen):
 
         # Canvas color
         layout_color(self, (0.25, 0, 0, 1))
+
+        self.db = None
 
         # Widgets
         n = 15
@@ -64,16 +69,29 @@ class LoginScreen(Screen):
             is_valid = persistent_data.validate_admin_login(username, password)
 
             if is_valid:
-                self.dialogue.text = ''
+                self.btn_reset_do()
                 self.manager.go_to_admin_panel()
             else:
                 self.dialogue.text = 'Wrong admin username and password !!!'
 
         else:
-            print("logged in as user")
+            username = self.text_input_username.text
+            password = self.text_input_password.text
+
+            db = self.db
+            does_match = db.does_user_password_match(username, password)
+
+            if does_match:
+                self.btn_reset_do()
+                user = db.get_user_by_username(username)
+                self.manager.go_to_user_panel(user=user, db=db)
+            else:
+                self.dialogue.text = "Username and password mismatch !"
+
 
 
     def btn_reset_do(self, *args):
+        self.dialogue.text = ''
         self.text_input_username.text = ''
         self.text_input_password.text = ''
         if not self.text_input_password.password:
