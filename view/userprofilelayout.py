@@ -100,11 +100,20 @@ class UserProfileLayout(RelativeLayout):
 
     def btn_done_do(self, *args):
         if self.is_any_change():
-            fname = self.text_input_fullname.text
-            user2 = self.db.get_user_by_fullname(fname)
-            if user2 and user2.id != self.user.id:
-                self.label_dialogue.text = "This Full Name belongs to another user, please try another."
-                return
+            # fname = self.text_input_fullname.text
+            # user2 = self.db.get_user_by_fullname(fname)
+            # if user2 and user2.id != self.user.id:
+            #     self.label_dialogue.text = "This Full Name belongs to another user, please try another."
+            #     return
 
-            self.db.update_user(self.user, {'fullname': self.text_input_fullname.text, 'short_bio': self.text_input_short_bio.text})
+            # self.db.update_user(self.user, {'fullname': self.text_input_fullname.text, 'short_bio': self.text_input_short_bio.text})
+
+            user = self.db.get_user_by_id(self.user.id)
+
+            user.fullname = self.text_input_fullname.text
+            user.short_bio = self.text_input_short_bio.text
+
+            self.db.session.commit()
+            self.user = user
+
         self.dismiss_popup()
